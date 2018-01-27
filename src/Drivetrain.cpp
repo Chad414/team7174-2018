@@ -19,15 +19,19 @@ Drivetrain::Drivetrain()
 
 Drivetrain::~Drivetrain() {}
 
-void Drivetrain::driveForward(int speed) {
+void Drivetrain::driveForward(double speed) {
 	if ((speed >= -1.0) && (speed <= 1.0)) {
 		m_lDrive1.Set(speed);
 		m_lDrive2.Set(speed);
 		m_rDrive1.Set(-speed);
 		m_rDrive2.Set(-speed);
+		std::cout << m_lDrive1.Get() << std::endl;
 	}
 }
 
 void Drivetrain::stop() {
-	driveForward(0);
+	m_lDrive1.StopMotor();
+	m_lDrive2.StopMotor();
+	m_rDrive1.StopMotor();
+	m_rDrive2.StopMotor();
 }

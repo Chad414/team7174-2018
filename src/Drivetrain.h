@@ -21,7 +21,7 @@ public:
 	Drivetrain();
 	virtual ~Drivetrain();
 
-	void driveForward(int speed);
+	void driveForward(double speed);
 	void stop();
 private:
 	Spark m_lDrive1;
