@@ -53,8 +53,11 @@ public:
 	void TeleopPeriodic() {
 		if (m_driver->ButtonA()) {
 			m_drivetrain->driveForward(0.5);
-			std::cout << "A Button Pressed" << std::endl;
-		} else {
+		}
+		else if (m_driver->ButtonB()) {
+					m_drivetrain->driveForward(-0.5);
+		}
+		else {
 			m_drivetrain->stop();
 		}
 	}
