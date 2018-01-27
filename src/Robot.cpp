@@ -55,7 +55,7 @@ public:
 			m_drivetrain->driveForward(0.5);
 		}
 		else if (m_driver->ButtonB()) {
-					m_drivetrain->driveForward(-0.5);
+			m_drivetrain->driveForward(-0.5);
 		}
 		else {
 			m_drivetrain->stop();
