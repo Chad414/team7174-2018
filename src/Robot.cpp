@@ -13,7 +13,9 @@
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
 
-#include <Drivetrain.h>
+#include "WPILib.h"
+#include "RobotUtils/RobotUtils.h"
+#include "Drivetrain.h"
 
 class Robot : public frc::IterativeRobot {
 private:
@@ -23,8 +25,8 @@ private:
 	const std::string kAutoNameCustom = "My Auto";
 	std::string m_autoSelected;
 
-	m_driver *HotJoystick;
-	m_drivetrain *Drivetrain;
+	HotJoystick *m_driver;
+	Drivetrain *m_drivetrain;
 
 public:
 
@@ -49,7 +51,7 @@ public:
 	void TeleopInit() {}
 
 	void TeleopPeriodic() {
-		if m_driver->ButtonA() {
+		if (m_driver->ButtonA()) {
 			m_drivetrain->driveForward(0.5);
 		} else {
 			m_drivetrain->stop();

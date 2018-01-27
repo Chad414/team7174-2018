@@ -5,6 +5,9 @@
  *      Author: Chad
  */
 
+#include "WPILib.h"
+#include <cmath>
+
 #ifndef SRC_DRIVETRAIN_H_
 #define SRC_DRIVETRAIN_H_
 
@@ -13,23 +16,19 @@
 #define RIGHT_DRIVE1 1
 #define RIGHT_DRIVE2 3
 
-namespace std {
-
 class Drivetrain {
 public:
 	Drivetrain();
 	virtual ~Drivetrain();
 
 	void driveForward(int speed);
+	void stop();
 private:
-
-	m_lDrive1 Spark;
-	m_lDrive2 Spark;
-	m_rDrive1 Spark;
-	m_rDrive2 Spark;
+	Spark m_lDrive1;
+	Spark m_lDrive2;
+	Spark m_rDrive1;
+	Spark m_rDrive2;
 
 };
-
-} /* namespace std */
 
 #endif /* SRC_DRIVETRAIN_H_ */
