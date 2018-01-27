@@ -51,16 +51,13 @@ public:
 	void TeleopInit() {}
 
 	void TeleopPeriodic() {
-		if (m_driver->ButtonA()) {
-			m_drivetrain->driveForward(0.5);
-		}
-		else if (m_driver->ButtonB()) {
-			m_drivetrain->driveForward(-0.5);
-		}
-		else {
-			m_drivetrain->stop();
+		if (fabs(m_driver->AxisLY()) > 0.2 || fabs(m_driver->AxisRX()) > 0.2) {
+			m_drivetrain->ArcadeDrive(-m_driver->AxisLY(), m_driver->AxisRX());
+		} else {
+			m_drivetrain->ArcadeDrive(0.0, 0.0);
 		}
 	}
+
 	void TestPeriodic() {}
 
 };

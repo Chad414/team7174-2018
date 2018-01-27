@@ -21,6 +21,7 @@ public:
 	Drivetrain();
 	virtual ~Drivetrain();
 
+	void ArcadeDrive(double speed, double angle);
 	void driveForward(double speed);
 	void stop();
 private:
@@ -29,6 +30,7 @@ private:
 	Spark m_rDrive1;
 	Spark m_rDrive2;
 
+	RobotDrive m_drive;
 };
 
 #endif /* SRC_DRIVETRAIN_H_ */
