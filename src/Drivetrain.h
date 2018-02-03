@@ -44,7 +44,9 @@ public:
 	double getRightEncoder();
 	double getAverageDistance();
 	void setSpeed(double speed);
+	void setTurn(double turn);
 	void setDistancePIDSpeed(double speed);
+	double getAngle();
 private:
 
 	class DistancePIDWrapper : public PIDSource, public PIDOutput {
@@ -57,7 +59,7 @@ private:
 		Drivetrain* m_drivetrain;
 	};
 
-	/*class AnglePIDWrapper : public PIDSource, public PIDOutput {
+	class AnglePIDWrapper : public PIDSource, public PIDOutput {
 	public:
 		AnglePIDWrapper(Drivetrain* drivetrain);
 		virtual ~AnglePIDWrapper();
@@ -65,13 +67,15 @@ private:
 		void PIDWrite(double output) override;
 	private:
 		Drivetrain* m_drivetrain;
-	};*/
+	};
 
-	double m_speed;
-	double m_turn;
+	double m_speed = 0;
+	double m_turn = 0;
 
 	double distancePIDSpeed = 0.8;
 	double distancePIDOutput = 0.0;
+	double turnPIDSpeed = 0.55;
+	double anglePIDOutput = 0;
 
 	WPI_TalonSRX m_lDrive1;
 	//WPI_TalonSRX m_lDrive2;
@@ -83,8 +87,8 @@ private:
 	Encoder m_lEncoder;
 	Encoder m_rEncoder;
 
-	//DistancePIDWrapper m_distancePIDWrapper;
-	//AnglePIDWrapper m_anglePIDWrapper;
+	DistancePIDWrapper m_distancePIDWrapper;
+	AnglePIDWrapper m_anglePIDWrapper;
 };
 
 #endif /* SRC_DRIVETRAIN_H_ */

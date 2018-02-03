@@ -15,12 +15,11 @@ Drivetrain::Drivetrain()
 	//m_rDrive2(RIGHT_DRIVE2),
 	m_drive(m_lDrive1, m_rDrive1),
 	m_lEncoder(LEFT_ENCODER, LEFT_ENCODER, false),
-	m_rEncoder(RIGHT_ENCODER, RIGHT_ENCODER, true)
+	m_rEncoder(RIGHT_ENCODER, RIGHT_ENCODER, true),
+	m_distancePIDWrapper(this),
+	m_anglePIDWrapper(this)
 {
 	m_drive.SetSafetyEnabled(false);
-
-	m_turn = 0;
-	m_speed = 0;
 }
 
 // ---------- Drivetrain Functions ----------
@@ -59,8 +58,16 @@ void Drivetrain::setSpeed(double speed) {
 	ArcadeDrive(speed, m_turn);
 }
 
+void Drivetrain::setTurn(double turn) {
+	ArcadeDrive(m_speed, turn);
+}
+
 void Drivetrain::setDistancePIDSpeed(double speed) {
 	distancePIDSpeed = speed;
+}
+
+double Drivetrain::getAngle() {
+	return 90.0;
 }
 
 // ---------- DistancePIDWrapper Functions ----------
@@ -79,5 +86,23 @@ double Drivetrain::DistancePIDWrapper::PIDGet () {
 void Drivetrain::DistancePIDWrapper::PIDWrite(double output) {
 	m_drivetrain->distancePIDOutput = output;
 	m_drivetrain->setSpeed(output * m_drivetrain->distancePIDSpeed);
+}
+
+// ---------- AnglePIDWrapper Functions ----------
+
+Drivetrain::AnglePIDWrapper::AnglePIDWrapper(Drivetrain* drivetrain) {
+	m_drivetrain = drivetrain;
+}
+
+Drivetrain::AnglePIDWrapper::~AnglePIDWrapper() {
+}
+
+double Drivetrain::AnglePIDWrapper::PIDGet() {
+	return m_drivetrain->getAngle();
+}
+
+void Drivetrain::AnglePIDWrapper::PIDWrite(double output) {
+	m_drivetrain->setTurn(-output * m_drivetrain->turnPIDSpeed);
+	m_drivetrain->anglePIDOutput = output;
 }
 
