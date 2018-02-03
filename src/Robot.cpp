@@ -36,9 +36,6 @@ public:
 	}
 
 	void RobotInit() {
-		m_chooser.AddDefault(kAutoNameDefault, kAutoNameDefault);
-		m_chooser.AddObject(kAutoNameCustom, kAutoNameCustom);
-		frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 	}
 
 	void AutonomousInit() override {
@@ -52,7 +49,7 @@ public:
 
 	void TeleopPeriodic() {
 		if (fabs(m_driver->AxisLY()) > 0.2 || fabs(m_driver->AxisRX()) > 0.2) {
-			m_drivetrain->ArcadeDrive(-m_driver->AxisLY(), m_driver->AxisRX());
+			m_drivetrain->ArcadeDrive(-m_driver->AxisLY(), -m_driver->AxisRX());
 		} else {
 			m_drivetrain->ArcadeDrive(0.0, 0.0);
 		}

@@ -7,6 +7,7 @@
 
 #include "WPILib.h"
 #include <cmath>
+#include "ctre/Phoenix.h"
 
 #ifndef SRC_DRIVETRAIN_H_
 #define SRC_DRIVETRAIN_H_
@@ -25,10 +26,10 @@ public:
 	void driveForward(double speed);
 	void stop();
 private:
-	Spark m_lDrive1;
-	Spark m_lDrive2;
-	Spark m_rDrive1;
-	Spark m_rDrive2;
+	WPI_TalonSRX m_lDrive1;
+	WPI_TalonSRX m_lDrive2;
+	WPI_TalonSRX m_rDrive1;
+	WPI_TalonSRX m_rDrive2;
 
 	RobotDrive m_drive;
 };
