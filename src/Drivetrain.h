@@ -23,8 +23,8 @@
 #define ANGLE_D 0.0
 
 #define LEFT_DRIVE1 14
-//#define LEFT_DRIVE2 2
 #define RIGHT_DRIVE1 15
+//#define LEFT_DRIVE2 2
 //#define RIGHT_DRIVE2 3
 
 #define LEFT_ENCODER 11 // Encoder values need to be updated
@@ -36,7 +36,8 @@ public:
 	virtual ~Drivetrain();
 
 	void ArcadeDrive(double speed, double angle);
-	void driveForward(double speed);
+	void setTalon(double speed, bool left);
+	double getTalonValues();
 	void stop();
 
 	double getRawEncoderValues();
