@@ -25,10 +25,21 @@ Drivetrain::Drivetrain()
 // ---------- Drivetrain Functions ----------
 
 Drivetrain::~Drivetrain() {}
-
+double speedMultiplier;
 void Drivetrain::ArcadeDrive(double speed, double angle) {
 	m_drive.SetSafetyEnabled(true);
-	m_drive.ArcadeDrive(speed, angle);
+	m_drive.ArcadeDrive(speed * speedMultiplier, angle * speedMultiplier);
+}
+void Drivetrain::potato()
+{
+	if(speedMultiplier == 1.0)
+	{
+		speedMultiplier = .5;
+	}
+	else if(speedMultiplier == .5)
+	{
+		speedMultiplier = 1.0;
+	}
 }
 
 double Drivetrain::getRawEncoderValues() {

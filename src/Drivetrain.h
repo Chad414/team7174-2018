@@ -9,6 +9,7 @@
 #include <cmath>
 #include "ctre/Phoenix.h"
 
+
 #ifndef SRC_DRIVETRAIN_H_
 #define SRC_DRIVETRAIN_H_
 
@@ -22,8 +23,8 @@
 #define ANGLE_I 0
 #define ANGLE_D 0.0
 
-#define LEFT_DRIVE1 14
-#define RIGHT_DRIVE1 15
+#define LEFT_DRIVE1 2
+#define RIGHT_DRIVE1 1
 //#define LEFT_DRIVE2 2
 //#define RIGHT_DRIVE2 3
 
@@ -36,10 +37,11 @@ public:
 	virtual ~Drivetrain();
 
 	void ArcadeDrive(double speed, double angle);
+	void potato();
 	void setTalon(double speed, bool left);
 	double getTalonValues();
 	void stop();
-
+	double speedMultiplier = 1.0;
 	double getRawEncoderValues();
 	double getLeftEncoder();
 	double getRightEncoder();
