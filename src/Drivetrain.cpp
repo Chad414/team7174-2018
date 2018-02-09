@@ -10,10 +10,10 @@
 
 Drivetrain::Drivetrain()
 	: m_lDrive1(LEFT_DRIVE1),
-	//m_lDrive2(LEFT_DRIVE2),
+	m_lDrive2(LEFT_DRIVE2),
 	m_rDrive1(RIGHT_DRIVE1),
-	//m_rDrive2(RIGHT_DRIVE2),
-	m_drive(m_lDrive1, m_rDrive1),
+	m_rDrive2(RIGHT_DRIVE2),
+	m_drive(&m_lDrive2, &m_lDrive1, &m_rDrive2, &m_rDrive1),
 	m_lEncoder(LEFT_ENCODER, LEFT_ENCODER, false),
 	m_rEncoder(RIGHT_ENCODER, RIGHT_ENCODER, true),
 	m_distancePIDWrapper(this),
@@ -30,15 +30,22 @@ void Drivetrain::ArcadeDrive(double speed, double angle) {
 	m_drive.SetSafetyEnabled(true);
 	m_drive.ArcadeDrive(speed * speedMultiplier, angle * speedMultiplier);
 }
+void Drivetrain::waitTime(int x)
+{
+	sleep_for(x*1000000000ns);
+	sleep_until(system_clock::now() + 1s);
+}
 void Drivetrain::potato()
 {
 	if(speedMultiplier == 1.0)
 	{
 		speedMultiplier = .5;
+		waitTime(.5);
 	}
 	else if(speedMultiplier == .5)
 	{
 		speedMultiplier = 1.0;
+		waitTime(.5);
 	}
 }
 
@@ -60,9 +67,9 @@ double Drivetrain::getRightEncoder() {
 
 void Drivetrain::stop() {
 	m_lDrive1.StopMotor();
-	//m_lDrive2.StopMotor();
+	m_lDrive2.StopMotor();
 	m_rDrive1.StopMotor();
-	//m_rDrive2.StopMotor();
+	m_rDrive2.StopMotor();
 }
 
 void Drivetrain::setTalon(double speed, bool left) { // For testing only

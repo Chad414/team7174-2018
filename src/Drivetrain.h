@@ -8,7 +8,12 @@
 #include "WPILib.h"
 #include <cmath>
 #include "ctre/Phoenix.h"
+#include <chrono>
+#include <thread>
 
+using namespace std::this_thread;
+using namespace std::chrono_literals;
+using std::chrono::system_clock;
 
 #ifndef SRC_DRIVETRAIN_H_
 #define SRC_DRIVETRAIN_H_
@@ -23,10 +28,10 @@
 #define ANGLE_I 0
 #define ANGLE_D 0.0
 
-#define LEFT_DRIVE1 2
-#define RIGHT_DRIVE1 1
-//#define LEFT_DRIVE2 2
-//#define RIGHT_DRIVE2 3
+#define LEFT_DRIVE1 1
+#define RIGHT_DRIVE1 3
+#define LEFT_DRIVE2 2
+#define RIGHT_DRIVE2 4
 
 #define LEFT_ENCODER 11 // Encoder values need to be updated
 #define RIGHT_ENCODER 12
@@ -38,6 +43,7 @@ public:
 
 	void ArcadeDrive(double speed, double angle);
 	void potato();
+	void waitTime(int x);
 	void setTalon(double speed, bool left);
 	double getTalonValues();
 	void stop();
@@ -81,9 +87,9 @@ private:
 	double anglePIDOutput = 0;
 
 	WPI_TalonSRX m_lDrive1;
-	//WPI_TalonSRX m_lDrive2;
+	WPI_TalonSRX m_lDrive2;
 	WPI_TalonSRX m_rDrive1;
-	//WPI_TalonSRX m_rDrive2;
+	WPI_TalonSRX m_rDrive2;
 
 	RobotDrive m_drive;
 
