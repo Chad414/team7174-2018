@@ -32,6 +32,9 @@ using std::chrono::system_clock;
 #define RIGHT_DRIVE1 3
 #define LEFT_DRIVE2 2
 #define RIGHT_DRIVE2 4
+#define FORWARD_INTAKE
+
+
 
 #define LEFT_ENCODER 11 // Encoder values need to be updated
 #define RIGHT_ENCODER 12
@@ -90,6 +93,7 @@ private:
 	WPI_TalonSRX m_lDrive2;
 	WPI_TalonSRX m_rDrive1;
 	WPI_TalonSRX m_rDrive2;
+
 
 	RobotDrive m_drive;
 

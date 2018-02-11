@@ -59,10 +59,11 @@ public:
 		else {
 			m_drivetrain->ArcadeDrive(0.0, 0.0);
 		}
-		if (m_driver->ButtonA()) {
+		/*if (m_driver->ButtonA()) {
 			m_drivetrain->setTalon(0.8, true);
 			m_drivetrain->setTalon(0.8, false);
 		}
+		*/
 	}
 
 	void TestPeriodic() {}
