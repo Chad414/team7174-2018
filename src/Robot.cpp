@@ -50,7 +50,7 @@ public:
 	void TeleopPeriodic() {
 		std::cout << "Average Talon Value: " << m_drivetrain->getTalonValues() << std::endl;
 		if (fabs(m_driver->AxisLY()) > 0.2 || fabs(m_driver->AxisRX()) > 0.2) {
-			m_drivetrain->ArcadeDrive(-m_driver->AxisLY(), -m_driver->AxisRX());
+			m_drivetrain->ArcadeDrive(m_driver->AxisLY(), -m_driver->AxisRX());
 		}
 		else if(m_driver->ButtonY())
 		{
