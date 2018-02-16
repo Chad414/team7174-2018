@@ -8,6 +8,7 @@
 #include "WPILib.h"
 #include <cmath>
 #include "ctre/Phoenix.h"
+#include <victor.h>
 #include <chrono>
 #include <thread>
 
@@ -32,7 +33,7 @@ using std::chrono::system_clock;
 #define RIGHT_DRIVE1 3
 #define LEFT_DRIVE2 2
 #define RIGHT_DRIVE2 4
-#define FORWARD_INTAKE
+
 
 
 
@@ -46,6 +47,8 @@ public:
 
 	void ArcadeDrive(double speed, double angle);
 	void potato();
+	void intake(double inOut);
+	void armYAxis(double upDown);
 	void waitTime(int x);
 	void setTalon(double speed, bool left);
 	double getTalonValues();
@@ -93,6 +96,9 @@ private:
 	WPI_TalonSRX m_lDrive2;
 	WPI_TalonSRX m_rDrive1;
 	WPI_TalonSRX m_rDrive2;
+
+	Victor *frontIntake = new Victor(0);
+	Victor *armYAxisObject = new Victor(0);
 
 
 	RobotDrive m_drive;

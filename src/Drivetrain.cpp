@@ -11,7 +11,9 @@
 
 
 Drivetrain::Drivetrain()
-	: m_lDrive1(LEFT_DRIVE1),
+
+	:
+m_lDrive1(LEFT_DRIVE1),
 	m_lDrive2(LEFT_DRIVE2),
 	m_rDrive1(RIGHT_DRIVE1),
 	m_rDrive2(RIGHT_DRIVE2),
@@ -23,6 +25,7 @@ Drivetrain::Drivetrain()
 {
 	m_drive.SetSafetyEnabled(false);
 }
+
 
 // ---------- Drivetrain Functions ----------
 
@@ -36,7 +39,18 @@ void Drivetrain::waitTime(int x)
 {
 	sleep_for(x*1000000000ns);
 	sleep_until(system_clock::now() + 1s);
+
 }
+void Drivetrain::intake(double inOut)
+{
+	frontIntake->Set(inOut);
+}
+
+void Drivetrain::armYAxis(double upDown)
+{
+	armYAxisObject->Set(upDown);
+}
+
 void Drivetrain::potato()
 {
 	if(speedMultiplier == 1.0)
