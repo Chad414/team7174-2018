@@ -33,6 +33,8 @@ using std::chrono::system_clock;
 #define RIGHT_DRIVE1 3
 #define LEFT_DRIVE2 2
 #define RIGHT_DRIVE2 4
+#define forwardIntake 7
+#define armYAXIS 6
 
 
 
@@ -96,9 +98,11 @@ private:
 	WPI_TalonSRX m_lDrive2;
 	WPI_TalonSRX m_rDrive1;
 	WPI_TalonSRX m_rDrive2;
+	WPI_VictorSPX frontIntake;
+	WPI_VictorSPX armYAxisObject;
 
-	Victor *frontIntake = new Victor(0);
-	Victor *armYAxisObject = new Victor(0);
+	//Victor *frontIntake = new Victor(7);
+	//Victor *armYAxisObject = new Victor(6);
 
 
 	RobotDrive m_drive;

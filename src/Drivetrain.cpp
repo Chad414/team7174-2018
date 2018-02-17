@@ -18,6 +18,8 @@ m_lDrive1(LEFT_DRIVE1),
 	m_rDrive1(RIGHT_DRIVE1),
 	m_rDrive2(RIGHT_DRIVE2),
 	m_drive(&m_lDrive2, &m_lDrive1, &m_rDrive2, &m_rDrive1),
+	frontIntake(forwardIntake),
+	armYAxisObject(armYAXIS),
 	m_lEncoder(LEFT_ENCODER, LEFT_ENCODER, false),
 	m_rEncoder(RIGHT_ENCODER, RIGHT_ENCODER, true),
 	m_distancePIDWrapper(this),
@@ -43,12 +45,12 @@ void Drivetrain::waitTime(int x)
 }
 void Drivetrain::intake(double inOut)
 {
-	frontIntake->Set(inOut);
+	frontIntake.Set(inOut);
 }
 
 void Drivetrain::armYAxis(double upDown)
 {
-	armYAxisObject->Set(upDown);
+	armYAxisObject.Set(upDown);
 }
 
 void Drivetrain::potato()
