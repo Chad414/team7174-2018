@@ -4,6 +4,7 @@
  *  Created on: Jan 27, 2018
  *      Author: Chad
  *
+ *
  */
 
 #include "Drivetrain.h"
@@ -54,6 +55,10 @@ void Drivetrain::armYAxis(double upDown)
 	armYAxisObject.Set(upDown);
 }
 
+void Drivetrain::sleepIntake()
+{
+	frontIntake.StopMotor();
+}
 void Drivetrain::potato()
 {
 	if(speedMultiplier == 1.0)

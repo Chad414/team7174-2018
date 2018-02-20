@@ -4,6 +4,7 @@
  *  Created on: Jan 27, 2018
  *      Author: Chad
  *
+ *
  */
 
 #include "WPILib.h"
@@ -12,6 +13,8 @@
 #include <victor.h>
 #include <chrono>
 #include <thread>
+#include <ctime>
+#include <ratio>
 
 using namespace std::this_thread;
 using namespace std::chrono_literals;
@@ -53,6 +56,7 @@ public:
 	void intake(double inOut);
 	void armYAxis(double upDown);
 	void waitTime(int x);
+	void sleepIntake();
 	void setTalon(double speed, bool left);
 	double getTalonValues();
 	void stop();

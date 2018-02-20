@@ -27,12 +27,14 @@ private:
 
 	HotJoystick *m_driver;
 	Drivetrain *m_drivetrain;
+	double timeWait1;
 
 public:
 
 	Robot() {
 		m_driver = new HotJoystick(0);
 		m_drivetrain = new Drivetrain();
+		timeWait1 = 0;
 	}
 
 	void RobotInit() {
@@ -45,20 +47,58 @@ public:
 	void AutonomousPeriodic() {
 	}
 
+
+
 	void TeleopInit() {}
 //eclipse is dumb
 	void TeleopPeriodic() {
 		std::cout << "Average Talon Value: " << m_drivetrain->getTalonValues() << std::endl;
-		if ((fabs (m_driver->AxisLY()) > 0.1 || fabs(m_driver->AxisRX())) > 0.1 ) {
+		if ((fabs (m_driver->AxisLY()) > 0.2 || fabs(m_driver->AxisRX())) > 0.2 )
+		{
 			m_drivetrain->ArcadeDrive(m_driver->AxisLY(), -m_driver->AxisRX());
+			if((fabs(m_driver->AxisRX())) > 0.5)
+			{
+				m_drivetrain->intake(0.5);
+			}
+				else if(((fabs(m_driver->AxisRX())) > .8))
+				{
+					m_drivetrain->intake(0.75);
+				}
 
+			 if(m_driver->ButtonA())
+					{
+						m_drivetrain->potato();
+					}
 
+					else if (m_driver->ButtonLT())
+					{
+						m_drivetrain->intake(-0.85);
+					}
+
+					else if(m_driver->ButtonRT())
+					{
+						m_drivetrain->intake(0.85);
+					}
+
+					else if(m_driver->ButtonRB())
+					{
+						m_drivetrain->armYAxis(1.0);
+					}
+
+					else if (m_driver->ButtonLB())
+					{
+						m_drivetrain->armYAxis(-1.0);
+					}
+
+					else {
+						if((fabs(m_driver->AxisRX())) < 0.5)
+						{
+						m_drivetrain->intake(0.15);
+						}
+						m_drivetrain->armYAxis(0.0);
+					}
 		}
-		else if(fabs ((m_driver->AxisLY() > 0.1) || (fabs(m_driver->AxisRX())) > 0.1 )) {
-			m_drivetrain->ArcadeDrive(m_driver->AxisLY(), -m_driver->AxisRX());
-
-		}
-		else if(m_driver->ButtonY())
+		else if(m_driver->ButtonA())
 		{
 			m_drivetrain->potato();
 		}
@@ -71,6 +111,13 @@ public:
 		else if(m_driver->ButtonRT())
 		{
 			m_drivetrain->intake(0.85);
+		}
+		else if (m_driver->ButtonX())
+		{
+
+			m_drivetrain->intake(-1.0);
+			m_drivetrain->sleepIntake();
+
 		}
 
 		else if(m_driver->ButtonRB())
@@ -85,7 +132,7 @@ public:
 
 		else {
 			m_drivetrain->ArcadeDrive(0.0, 0.0);
-			m_drivetrain->intake(0.0);
+			m_drivetrain->intake(0.15);
 			m_drivetrain->armYAxis(0.0);
 		}
 		/*if (m_driver->ButtonA()) {
