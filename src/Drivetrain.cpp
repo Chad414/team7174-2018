@@ -4,8 +4,6 @@
  *  Created on: Jan 27, 2018
  *      Author: Chad
  *
- *
- *
  */
 
 #include "Drivetrain.h"
@@ -56,10 +54,7 @@ void Drivetrain::armYAxis(double upDown)
 	armYAxisObject.Set(upDown);
 }
 
-void Drivetrain::sleepIntake()
-{
-	frontIntake.StopMotor();
-}
+
 void Drivetrain::potato()
 {
 	if(speedMultiplier == 1.0)
@@ -73,6 +68,13 @@ void Drivetrain::potato()
 		waitTime(.5);
 	}
 }
+
+/*
+void Drivetrain::waterBottle()
+{
+	m_drive.ArcadeDrive(1.0, 0.0);
+}
+*/
 
 double Drivetrain::getRawEncoderValues() {
 	return ((m_lEncoder.Get() + m_rEncoder.Get()) / 2);

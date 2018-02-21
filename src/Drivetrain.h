@@ -3,7 +3,6 @@
  *
  *  Created on: Jan 27, 2018
  *      Author: Chad
- *
  */
 
 #include "WPILib.h"
@@ -52,10 +51,13 @@ public:
 
 	void ArcadeDrive(double speed, double angle);
 	void potato();
+
+	//void waterBottle();
+
 	void intake(double inOut);
 	void armYAxis(double upDown);
 	void waitTime(int x);
-	void sleepIntake();
+
 	void setTalon(double speed, bool left);
 	double getTalonValues();
 	void stop();
