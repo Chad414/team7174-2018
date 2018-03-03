@@ -107,7 +107,7 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn slightly Back Left
 			}
 			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 125) {
 				//Adds delay does nothing
@@ -119,19 +119,19 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 		}
 		else { //Switch on the left -1
 			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 100) {
 				m_drivetrain->ArcadeDrive(-1, 0.5); //Turn 90 Right
 			}
 			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 100) {
 				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn 90 Left
 			}
 			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 200) {
 				//Adds delay does nothing
@@ -144,13 +144,13 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 	else { //LR Start
 		if (switchLR == startPosition) { //Switch on same side as starting
 			if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 150) {
 				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 R on R, L on L
 			}
 			else if (autonLoopCounter < 250) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 300) {
 				//Adds delay does nothing
@@ -161,25 +161,25 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 		}
 		else { //Switch on opposite side
 			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 100) {
 				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 L on R, R on L
 			}
 			else if (autonLoopCounter < 200) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 250) {
 				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
 			}
 			else if (autonLoopCounter < 300) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 350) {
 				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
 			}
 			else if (autonLoopCounter < 400) {
-				m_drivetrain->ArcadeDrive(0.8,0.0); //Move back
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
 			else if (autonLoopCounter < 450) {
 				//Adds delay does nothing
