@@ -55,6 +55,32 @@ void Drivetrain::armYAxis(double upDown)
 	armYAxisObject.Set(upDown);
 }
 
+void Drivetrain::cubeAutoFix()
+{
+	intake(-0.5);
+	waitTime(0.08);
+
+}
+
+void Drivetrain::armYDrop()
+{
+
+	armYAxisObject.Set(0.35);
+
+	waitTime(0.025);
+	//armYAxisObject.Set(0.0);
+
+	stopArmY();
+	intake(-0.5);
+
+	//armYAxisObject.Set(0.0);
+
+}
+
+void Drivetrain::maxPowerLaunch()
+{
+	intake(-1.0);
+}
 
 void Drivetrain::potato()
 {
@@ -68,6 +94,10 @@ void Drivetrain::potato()
 		speedMultiplier = 1.0;
 		waitTime(.5);
 	}
+}
+
+void Drivetrain::stopArmY() {
+	armYAxisObject.StopMotor();
 }
 
 /*

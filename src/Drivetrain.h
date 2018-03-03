@@ -52,6 +52,10 @@ public:
 
 	void ArcadeDrive(double speed, double angle);
 	void potato();
+	void stopArmY();
+	void armYDrop();
+	void maxPowerLaunch();
+	void cubeAutoFix();
 
 	//void waterBottle();
 
