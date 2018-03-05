@@ -77,7 +77,7 @@ void AutonomousInit() override
 
 void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 {
-	/*
+
 	if (startPosition == 0) {
 		if (autonLoopCounter<400)
 			{
@@ -100,19 +100,26 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 			m_drivetrain->ArcadeDrive(0.0,0.0);
 		}
 	}
-	*/
-	if (startPosition == 0) { //Robot starts in Middle
-		if (switchLR == 1) { //Switch on the right
-			if (autonLoopCounter < 5) {
+
+	/*
+	if (startPosition == 0)
+	{ //Robot starts in Middle
+		if (switchLR == 1)
+		{ //Switch on the right
+			if (autonLoopCounter < 5)
+			{
 				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn slightly Back Left
 			}
-			else if (autonLoopCounter < 100) {
+			else if (autonLoopCounter < 100)
+			{
 				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
 			}
-			else if (autonLoopCounter < 125) {
-				//Adds delay does nothing
+			else if (autonLoopCounter < 125)
+			{
+				//Adds delay does nothing. waitTime(2.5)should do the same thing. Easier to read?
 			}
-			else if (autonLoopCounter < 150) {
+			else if (autonLoopCounter < 150)
+			{
 				m_drivetrain->intake(-1); //Shoot Cube at full power
 			}
 
@@ -137,7 +144,7 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 				//Adds delay does nothing
 			}
 			else if (autonLoopCounter < 250) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
+				m_drivetrain->intake(-1.0); //Shoot Cube at full power
 			}
 		}
 	}
@@ -189,7 +196,8 @@ void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 			}
 		}
 	}
-	autonLoopCounter++;
+	*/
+	//autonLoopCounter++;
 }
 
 void TeleopInit()
