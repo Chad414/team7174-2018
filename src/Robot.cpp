@@ -25,9 +25,18 @@ private:
 	const std::string kAutoNameCustom = "My Auto";
 	std::string m_autoSelected;
 
-	int autonLoopCounter;
+	int autonCase = 0;
+	int autonType = 0;
 	int startPosition=1;
-	int switchLR= 0;
+	bool switchIsOnStartingSide = true;
+	bool startingMid = false;
+	bool switchAuton = true;
+
+	int distanceToDriveToOtherSide = 0; // Value will be used if switchIsOnStartingSide == false
+	int initialDistance = 10.0; // This is dependent on robot speed. Unit is seconds.
+	int initialTurningDistance = 10;
+
+	Timer autonTimer;
 
 	std::string gameData;
 
@@ -42,154 +51,74 @@ Robot()
 {
 	m_driver = new HotJoystick(0);
 	m_drivetrain = new Drivetrain();
+
 }
 
 void RobotInit()
 {
 
+	if (gameData[0] == 'L' && autonType == 0) {
+		switchIsOnStartingSide = true;
+	} else if (gameData[0] =='R' && autonType == 1) {
+		switchIsOnStartingSide = true;
+	} else {
+		switchIsOnStartingSide = false;
+	}
+
+	if (autonType == 0) { // Switch, Start left
+		// Set values for specific auton here
+		switchAuton = true;
+		startingMid = false;
+	} else if (autonType == 1) { // Switch, start right
+		switchAuton = true;
+		startingMid = false;
+	} else if (autonType == 2) { // Switch, start mid
+		switchAuton = true;
+		startingMid = true;
+
+		if (gameData[0] == 'L') {
+			// Set angle values
+		} else if (gameData[0] == 'R') {
+			// Set opposite angle values
+		}
+	}
 }
 
 void AutonomousInit() override
 {
-	autonLoopCounter=0;
+	autonCase = 0;
 	m_drivetrain->speedMultiplier=1.0;
+
+	autonTimer.Stop;
+	autonTimer.Reset;
 
 	std::string gameData;
 
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
-	if(gameData[0] == 'L')
-	{
-		switchLR=-1;
-	}
-
-	else if (gameData[0]=='R')
-	{
-		switchLR=1;
-	}
-
-	else
-	{
-		switchLR=0;
-	}
-
 }
 
 void AutonomousPeriodic()//Neg number turns right. Positive goes forward
 {
-	/*
-	if (startPosition == 0) {
-		if (autonLoopCounter<400)
-			{
-			//Middle program.
-				m_drivetrain->ArcadeDrive(0.4,0.0);
-				autonLoopCounter=autonLoopCounter+1;
-			}
-		else
-		{
-			m_drivetrain->ArcadeDrive(0.0,0.0);
+	if (!startingMid && switchIsOnStartingSide) {
+		switch (autonCase) {
+		case 0:
+			// Perform first step here
+			// If auton is done, autonCase++;
+			// Use Timer or gyro angle to test if each case is finished
+			break;
+		case 1:
+			// Perform second step here
+			break;
 		}
-	}
-	else {
-		if (autonLoopCounter<60) {
-			m_drivetrain->ArcadeDrive(-1.0,0.0);
-			autonLoopCounter=autonLoopCounter+1;
-		}
-		else
-		{
-			m_drivetrain->ArcadeDrive(0.0,0.0);
-		}
-	}
-	*/
-	if (startPosition == 0) { //Robot starts in Middle
-		if (switchLR == 1) { //Switch on the right
-			if (autonLoopCounter < 5) {
-				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn slightly Back Left
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 125) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
+	} else if (!startingMid && !switchIsOnStartingSide) {
+		// Driving to the other side requires a different auton
+		// Create another switch statement here
+	} else if (startingMid) {
 
-		}
-		else { //Switch on the left -1
-			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, 0.5); //Turn 90 Right
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn 90 Left
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 200) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
-		}
 	}
-	else { //LR Start
-		if (switchLR == startPosition) { //Switch on same side as starting
-			if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 300) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 350) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
-		}
-		else { //Switch on opposite side
-			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 L on R, R on L
-			}
-			else if (autonLoopCounter < 200) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 300) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 350) {
-				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 400) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 450) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 500) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
-		}
-	}
-	autonLoopCounter++;
+
+
 }
 
 void TeleopInit()
@@ -320,81 +249,95 @@ START_ROBOT_CLASS(Robot)
 
 
 /*
-	startPosition=1;
-
-	if (startPosition==1)//Left
-	{
-		if (switchLR==1)
-		{
-
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
+	if (startPosition == 0) { //Robot starts in Middle
+		if (switchLR == 1) { //Switch on the right
+			if (autonLoopCounter < 5) {
+				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn slightly Back Left
+			}
+			else if (autonLoopCounter < 100) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 125) {
+				//Adds delay does nothing
+			}
+			else if (autonLoopCounter < 150) {
+				m_drivetrain->intake(-1); //Shoot Cube at full power
+			}
 
 		}
-	}
-
-	else if (startPosition==2)//Middle
-	{
-		if (switchLR==1)
-		{
-
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
-
-		}
-	}
-
-	else if (startPosition==2)//Right
-	{
-		if (switchLR==1)
-		{
-			if (autonLoopCounter<40)
-				{
-					m_drivetrain->ArcadeDrive(0.4,0.0);
-
-					autonLoopCounter++;
-				}
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
-
+		else { //Switch on the left -1
+			if (autonLoopCounter < 50) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 100) {
+				m_drivetrain->ArcadeDrive(-1, 0.5); //Turn 90 Right
+			}
+			else if (autonLoopCounter < 150) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 100) {
+				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn 90 Left
+			}
+			else if (autonLoopCounter < 150) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 200) {
+				//Adds delay does nothing
+			}
+			else if (autonLoopCounter < 250) {
+				m_drivetrain->intake(-1); //Shoot Cube at full power
+			}
 		}
 	}
-
-*/
-
-/*
-	if (autonLoopCounter<100)
-	{
-		m_drivetrain->ArcadeDrive(-1.0,0.0);
-		//m_drivetrain->intake(0.8);
-		autonLoopCounter=autonLoopCounter+1;
+	else { //LR Start
+		if (switchLR == startPosition) { //Switch on same side as starting
+			if (autonLoopCounter < 100) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 150) {
+				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 R on R, L on L
+			}
+			else if (autonLoopCounter < 250) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 300) {
+				//Adds delay does nothing
+			}
+			else if (autonLoopCounter < 350) {
+				m_drivetrain->intake(-1); //Shoot Cube at full power
+			}
+		}
+		else { //Switch on opposite side
+			if (autonLoopCounter < 50) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 100) {
+				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 L on R, R on L
+			}
+			else if (autonLoopCounter < 200) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 250) {
+				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
+			}
+			else if (autonLoopCounter < 300) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 350) {
+				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
+			}
+			else if (autonLoopCounter < 400) {
+				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
+			}
+			else if (autonLoopCounter < 450) {
+				//Adds delay does nothing
+			}
+			else if (autonLoopCounter < 500) {
+				m_drivetrain->intake(-1); //Shoot Cube at full power
+			}
+		}
 	}
+	autonLoopCounter++;
 
-	else
-	{
-		m_drivetrain->ArcadeDrive(0.0,0.0);
-		m_drivetrain->intake(0.0);
-	}
 */
 
