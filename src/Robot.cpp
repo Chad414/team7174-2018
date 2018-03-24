@@ -26,11 +26,19 @@ private:
 	std::string m_autoSelected;
 
 	int autonCase = 0;
+
 	int autonType = 0;
-	int startPosition=1;
+	/*
+	 * 0 - Switch, Start LEFT
+	 * 1 - Switch, Start RIGHT
+	 * 2 - Switch, Start MID
+	 */
+
+	int startPosition = 1;
 	bool switchIsOnStartingSide = true;
 	bool startingMid = false;
 	bool switchAuton = true;
+	int switchLR = 0;
 
 	int distanceToDriveToOtherSide = 0; // Value will be used if switchIsOnStartingSide == false
 	int initialDistance = 10.0; // This is dependent on robot speed. Unit is seconds.
@@ -57,21 +65,33 @@ Robot()
 void RobotInit()
 {
 
-	if (gameData[0] == 'L' && autonType == 0) {
-		switchIsOnStartingSide = true;
-	} else if (gameData[0] =='R' && autonType == 1) {
-		switchIsOnStartingSide = true;
-	} else {
-		switchIsOnStartingSide = false;
+	if(gameData[0] == 'L') {
+		switchLR =-1;
+	} else if (gameData[0]=='R') {
+		switchLR = 1;
 	}
+
+	// --------------------------------------------
 
 	if (autonType == 0) { // Switch, Start left
 		// Set values for specific auton here
 		switchAuton = true;
 		startingMid = false;
+		if (switchLR == -1) {
+			switchIsOnStartingSide = true;
+		} else {
+			switchIsOnStartingSide = false;
+		}
+
 	} else if (autonType == 1) { // Switch, start right
 		switchAuton = true;
 		startingMid = false;
+		if (switchLR == 1) {
+			switchIsOnStartingSide = true;
+		} else {
+			switchIsOnStartingSide = false;
+		}
+
 	} else if (autonType == 2) { // Switch, start mid
 		switchAuton = true;
 		startingMid = true;
@@ -81,7 +101,9 @@ void RobotInit()
 		} else if (gameData[0] == 'R') {
 			// Set opposite angle values
 		}
+
 	}
+
 }
 
 void AutonomousInit() override
