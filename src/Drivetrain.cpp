@@ -10,8 +10,6 @@
 #include "Drivetrain.h"
 #include <iostream>
 
-
-
 Drivetrain::Drivetrain()
 
 	:
@@ -35,10 +33,105 @@ m_lDrive1(LEFT_DRIVE1),
 
 Drivetrain::~Drivetrain() {}
 double speedMultiplier;
-void Drivetrain::ArcadeDrive(double speed, double angle) {
+int loopSecond;
+int simpleDriveLoopCounter;
+Timer autonTimer;
+bool timerCheck= true;
+//int autonCase;
+
+
+void Drivetrain::ArcadeDrive(double speed, double angle)
+{
 	m_drive.SetSafetyEnabled(true);
 	m_drive.ArcadeDrive(speed * speedMultiplier, angle * speedMultiplier);
 }
+
+int Drivetrain::simpleDrive(double speed, double angle, double loopSeconds)
+{
+	if (timerCheck==true)
+	{
+		autonTimer.Start();
+		timerCheck=false;
+	}
+	m_drive.ArcadeDrive(speed, angle);
+	intake(0.0);
+
+	if (autonTimer.Get()>loopSeconds)
+		{
+
+			m_drive.ArcadeDrive(0.0, 0.0);
+			intake(0.0);
+			autonTimer.Stop();
+			autonTimer.Reset();
+			timerCheck=true;
+			//autonCase++;
+			return 1;
+		}
+
+	else
+	{
+		return 0;
+	}
+}
+
+int Drivetrain::simpleIntake(double speed, double loopSeconds)
+{
+	if (timerCheck==true)
+	{
+		autonTimer.Start();
+		timerCheck=false;
+	}
+	m_drive.ArcadeDrive(0.0, 0.0);
+	intake(speed);
+
+	if (autonTimer.Get()>loopSeconds)
+		{
+
+			m_drive.ArcadeDrive(0.0, 0.0);
+			intake(0.0);
+			autonTimer.Stop();
+			autonTimer.Reset();
+			timerCheck=true;
+			//autonCase++;
+			return 1;
+		}
+
+	else
+	{
+		return 0;
+	}
+}
+
+int Drivetrain::simpleArmYAxis(double speed, double loopSeconds)
+{
+	if (timerCheck==true)
+	{
+		autonTimer.Start();
+		timerCheck=false;
+	}
+	m_drive.ArcadeDrive(0.0, 0.0);
+	intake(0.0);
+	armYAxis(speed);
+
+	if (autonTimer.Get()>loopSeconds)
+		{
+			armYAxis(0.0);
+			m_drive.ArcadeDrive(0.0, 0.0);
+			intake(0.0);
+			autonTimer.Stop();
+			autonTimer.Reset();
+			timerCheck=true;
+			//autonCase++;
+			return 1;
+		}
+
+	else
+	{
+		return 0;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 void Drivetrain::waitTime(int x)
 {
 	sleep_for(x*1000000000ns);
@@ -48,6 +141,7 @@ void Drivetrain::waitTime(int x)
 void Drivetrain::intake(double inOut)
 {
 	frontIntake.Set(inOut);
+
 }
 
 void Drivetrain::armYAxis(double upDown)
@@ -61,6 +155,7 @@ void Drivetrain::cubeAutoFix()
 	waitTime(0.08);
 
 }
+
 
 void Drivetrain::armYDrop()
 {
@@ -87,25 +182,18 @@ void Drivetrain::potato()
 	if(speedMultiplier == 1.0)
 	{
 		speedMultiplier = .5;
-		waitTime(.5);
+		waitTime(.25);
 	}
 	else if(speedMultiplier == .5)
 	{
 		speedMultiplier = 1.0;
-		waitTime(.5);
+		waitTime(.25);
 	}
 }
 
 void Drivetrain::stopArmY() {
 	armYAxisObject.StopMotor();
 }
-
-/*
-void Drivetrain::waterBottle()
-{
-	m_drive.ArcadeDrive(1.0, 0.0);
-}
-*/
 
 double Drivetrain::getRawEncoderValues() {
 	return ((m_lEncoder.Get() + m_rEncoder.Get()) / 2);

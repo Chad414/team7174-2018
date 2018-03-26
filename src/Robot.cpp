@@ -25,15 +25,17 @@ private:
 	const std::string kAutoNameCustom = "My Auto";
 	std::string m_autoSelected;
 
-	int autonLoopCounter;
 	int startPosition=1;
 	int switchLR= 0;
+	int autonCase=0;
 
 	std::string gameData;
 
 
 	HotJoystick *m_driver;
 	Drivetrain *m_drivetrain;
+
+	Timer autonTimer;
 
 
 public:
@@ -46,16 +48,16 @@ Robot()
 
 void RobotInit()
 {
-
+	autonTimer.Stop();
+	autonTimer.Reset();
 }
 
 void AutonomousInit() override
 {
-	autonLoopCounter=0;
+	autonCase=0;
 	m_drivetrain->speedMultiplier=1.0;
 
 	std::string gameData;
-
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
 	if(gameData[0] == 'L')
@@ -67,138 +69,145 @@ void AutonomousInit() override
 	{
 		switchLR=1;
 	}
-
-	else
-	{
-		switchLR=0;
-	}
-
 }
 
-void AutonomousPeriodic()//Neg number turns right. Positive goes forward
+void AutonomousPeriodic()//(positive=backwards, positive=left, time seconds)
 {
-
-	if (startPosition == 0) {
-		if (autonLoopCounter<400)
-			{
-			//Middle program.
-				m_drivetrain->ArcadeDrive(0.4,0.0);
-				autonLoopCounter=autonLoopCounter+1;
-			}
-		else
+	int x=0;
+	if (startPosition == 0)//start center
 		{
-			m_drivetrain->ArcadeDrive(0.0,0.0);
-		}
-	}
-	else {
-		if (autonLoopCounter<60) {
-			m_drivetrain->ArcadeDrive(-1.0,0.0);
-			autonLoopCounter=autonLoopCounter+1;
-		}
-		else
+			if (switchLR==1)//Switch Right.
+			{
+				switch (autonCase)
+				{
+				case 0:
+				x = m_drivetrain->simpleDrive(-0.4, 0.0, 1.0); //Move backwards slightly.
+				if (x == 1){autonCase++;}break;
+
+				case 1:
+				x=m_drivetrain->simpleDrive(0.0, 0.5, 0.25);//Turn R slightly.
+				if (x == 1){autonCase++;}break;
+
+				case 2:
+				x=m_drivetrain->simpleDrive(-0.5, 0.0, 0.25); //Move backward.
+				if (x == 1){autonCase++;}break;
+
+				case 3:
+				x=m_drivetrain->simpleDrive(0.5, -1.0, 0.25); //Turn L slightly.
+				if (x == 1){autonCase++;}break;
+
+				case 4:
+				x=m_drivetrain->simpleDrive(-0.5, 0.0, 0.25); //Move backward to wall.
+				if (x == 1){autonCase++;}break;
+
+				case 5:
+				x=m_drivetrain->simpleIntake(-1.0, 0.5); //Launch cube backwards.
+				if (x == 1){autonCase++;}break;
+
+				case 6:
+				x=m_drivetrain->simpleArmYAxis(0.65, 0.5); //Launch cube backwards.
+				if (x == 1){autonCase++;}break;
+
+				}
+
+			}
+
+		else if (switchLR==-1)//switch left.
 		{
-			m_drivetrain->ArcadeDrive(0.0,0.0);
-		}
-	}
-
-	/*
-	if (startPosition == 0)
-	{ //Robot starts in Middle
-		if (switchLR == 1)
-		{ //Switch on the right
-			if (autonLoopCounter < 5)
-			{
-				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn slightly Back Left
-			}
-			else if (autonLoopCounter < 100)
-			{
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 125)
-			{
-				//Adds delay does nothing. waitTime(2.5)should do the same thing. Easier to read?
-			}
-			else if (autonLoopCounter < 150)
-			{
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
 
 		}
-		else { //Switch on the left -1
-			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, 0.5); //Turn 90 Right
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, -0.5); //Turn 90 Left
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 200) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->intake(-1.0); //Shoot Cube at full power
-			}
-		}
-	}
-	else { //LR Start
-		if (switchLR == startPosition) { //Switch on same side as starting
-			if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 150) {
-				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 300) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 350) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
+
+		else if (startPosition==1||startPosition==-1)//start left or right
+		{
+			switch (autonCase)
+			{
+			case 0:
+			x = m_drivetrain->simpleDrive(0.6, 0.0, 2.0);
+			if (x == 1){autonCase++;}break;
+
+			x=m_drivetrain->simpleDrive(0.5, 0.5, 1.5);
+			if (x == 1){autonCase++;}break;
+
+			case 2:
+			x=m_drivetrain->simpleDrive(0.5, -0.5, 0.2);
+			if (x == 1){autonCase++;}break;
+
+			case 3:
+			x=m_drivetrain->simpleDrive(0.5, 0.0, 1.5);
+			if (x == 1){autonCase++;}break;
+
+			case 4:
+			x=m_drivetrain->simpleArmYAxis(0.5, 2.0);
+			if (x == 1){autonCase++;}break;
+
+			case 5:
+			x=m_drivetrain->simpleIntake(-1.0, 0.5);
+			if (x == 1){autonCase++;}break;
 			}
 		}
-		else { //Switch on opposite side
-			if (autonLoopCounter < 50) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 100) {
-				m_drivetrain->ArcadeDrive(-1, switchLR*0.5); //Turn 90 L on R, R on L
-			}
-			else if (autonLoopCounter < 200) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 250) {
-				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 300) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 350) {
-				m_drivetrain->ArcadeDrive(-1, startPosition*0.5); //Turn 90 R on R, L on L
-			}
-			else if (autonLoopCounter < 400) {
-				m_drivetrain->ArcadeDrive(-0.8,0.0); //Move back
-			}
-			else if (autonLoopCounter < 450) {
-				//Adds delay does nothing
-			}
-			else if (autonLoopCounter < 500) {
-				m_drivetrain->intake(-1); //Shoot Cube at full power
-			}
-		}
-	}
-	*/
-	//autonLoopCounter++;
 }
+}
+/*if (startPosition==0)
+{
+	switch (autonCase)
+		{
+		case 0://move backwards.
+			autonTimer.Start();
+			m_drivetrain->ArcadeDrive(0.5, 0.0);
+			if (autonTimer.Get()>0.75)
+			{
+				m_drivetrain->ArcadeDrive(0.0, 0.0);
+				autonTimer.Stop();
+				autonTimer.Reset();
+				autonCase++;
+			}
+			break;
+		case 1:
+			autonTimer.Start();//turn
+			m_drivetrain->ArcadeDrive(0.0, 0.5);
+			if (autonTimer.Get()>0.3)
+			{
+				m_drivetrain->ArcadeDrive(0.0, 0.0);
+				autonTimer.Stop();
+				autonTimer.Reset();
+				autonCase++;
+			}
+			break;
+
+}
+switch (autonCase)
+{
+case 0:
+	autonTimer.Start();
+	m_drivetrain->ArcadeDrive(0.3, 0.0);
+	if (autonTimer.Get()>1.0)
+	{
+		m_drivetrain->ArcadeDrive(0.0, 0.0);
+		autonTimer.Stop();
+		autonTimer.Reset();
+		autonCase++;
+	}
+	break;
+
+case 1:
+	autonTimer.Start();
+	m_drivetrain->ArcadeDrive(0.2, 0.5);
+	if (autonTimer.Get()>0.5)
+	{
+		m_drivetrain->ArcadeDrive(0.0, 0.0);
+		autonTimer.Stop();
+		autonTimer.Reset();
+		autonCase++;
+	}
+	break;
+}
+
+
+if (autonSingleRun==0)
+{
+/////////////////////////////////////////////////////////////////
+*
+* */
 
 void TeleopInit()
 {
@@ -278,14 +287,14 @@ void TeleopPeriodic()
 		}
 
 	else if (m_driver->ButtonY())
-			{
-				m_drivetrain->maxPowerLaunch();
-			}
+		{
+			m_drivetrain->maxPowerLaunch();
+		}
 
 	else if (m_driver->ButtonB())
-			{
-				m_drivetrain->armYDrop();
-			}
+		{
+			m_drivetrain->armYDrop();
+		}
 
 	else if (m_driver->ButtonLT())
 		{
@@ -326,70 +335,6 @@ void TestPeriodic()
 
 START_ROBOT_CLASS(Robot)
 
-
-/*
-	startPosition=1;
-
-	if (startPosition==1)//Left
-	{
-		if (switchLR==1)
-		{
-
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
-
-		}
-	}
-
-	else if (startPosition==2)//Middle
-	{
-		if (switchLR==1)
-		{
-
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
-
-		}
-	}
-
-	else if (startPosition==2)//Right
-	{
-		if (switchLR==1)
-		{
-			if (autonLoopCounter<40)
-				{
-					m_drivetrain->ArcadeDrive(0.4,0.0);
-
-					autonLoopCounter++;
-				}
-		}
-
-		else if (switchLR==2)
-		{
-
-		}
-
-		else if (switchLR==0)
-		{
-
-		}
-	}
-
-*/
 
 /*
 	if (autonLoopCounter<100)

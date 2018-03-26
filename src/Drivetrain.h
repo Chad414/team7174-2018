@@ -3,7 +3,7 @@
  *
  *  Created on: Jan 27, 2018
  *      Author: Chad
- *
+
  */
 
 #include "WPILib.h"
@@ -57,7 +57,10 @@ public:
 	void maxPowerLaunch();
 	void cubeAutoFix();
 
-	//void waterBottle();
+	int simpleDrive(double speed, double angle, double loopSeconds);
+	int simpleIntake(double speed, double loopSeconds);
+	int simpleArmYAxis(double speed, double loopSeconds);
+
 
 	void intake(double inOut);
 	void armYAxis(double upDown);
