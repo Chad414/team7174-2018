@@ -24,19 +24,16 @@ private:
 	const std::string kAutoNameDefault = "Default";
 	const std::string kAutoNameCustom = "My Auto";
 	std::string m_autoSelected;
-
-	int startPosition=1;
 	int switchLR= 0;
 	int autonCase=0;
-
 	std::string gameData;
-
-
 	HotJoystick *m_driver;
 	Drivetrain *m_drivetrain;
-
 	Timer autonTimer;
 
+/////////////////////////////////////////////////////////////////////////////////////
+	int startPosition=0;
+/////////////////////////////////////////////////////////////////////////////////////
 
 public:
 
@@ -71,143 +68,110 @@ void AutonomousInit() override
 	}
 }
 
-void AutonomousPeriodic()//(positive=backwards, positive=left, time seconds)
+void AutonomousPeriodic() //simpleDrive(positive=forwards, positive=right, time seconds)
 {
+	m_drivetrain->intake(0.0);
 	int x=0;
-	if (startPosition == 0)//start center
-		{
-			if (switchLR==1)//Switch Right.
-			{
-				switch (autonCase)
-				{
-				case 0:
-				x = m_drivetrain->simpleDrive(-0.4, 0.0, 1.0); //Move backwards slightly.
-				if (x == 1){autonCase++;}break;
-
-				case 1:
-				x=m_drivetrain->simpleDrive(0.0, 0.5, 0.25);//Turn R slightly.
-				if (x == 1){autonCase++;}break;
-
-				case 2:
-				x=m_drivetrain->simpleDrive(-0.5, 0.0, 0.25); //Move backward.
-				if (x == 1){autonCase++;}break;
-
-				case 3:
-				x=m_drivetrain->simpleDrive(0.5, -1.0, 0.25); //Turn L slightly.
-				if (x == 1){autonCase++;}break;
-
-				case 4:
-				x=m_drivetrain->simpleDrive(-0.5, 0.0, 0.25); //Move backward to wall.
-				if (x == 1){autonCase++;}break;
-
-				case 5:
-				x=m_drivetrain->simpleIntake(-1.0, 0.5); //Launch cube backwards.
-				if (x == 1){autonCase++;}break;
-
-				case 6:
-				x=m_drivetrain->simpleArmYAxis(0.65, 0.5); //Launch cube backwards.
-				if (x == 1){autonCase++;}break;
-
-				}
-
-			}
-
-		else if (switchLR==-1)//switch left.
-		{
-
-		}
-
-		else if (startPosition==1||startPosition==-1)//start left or right
+	if (startPosition == 0) //Start center.
+	{
+		if (switchLR==1) //Switch Right.
 		{
 			switch (autonCase)
 			{
-			case 0:
-			x = m_drivetrain->simpleDrive(0.6, 0.0, 2.0);
-			if (x == 1){autonCase++;}break;
+				case 0:
+					x = m_drivetrain->simpleDrive(-0.5, 0.0, 1.5); //Move backwards slightly.
+					if (x == 1){autonCase++;}break;
 
-			x=m_drivetrain->simpleDrive(0.5, 0.5, 1.5);
-			if (x == 1){autonCase++;}break;
+				case 1:
+					x=m_drivetrain->simpleDrive(0.0, 0.5, 0.91);//Turn R slightly.
+					if (x == 1){autonCase++;}break;
 
-			case 2:
-			x=m_drivetrain->simpleDrive(0.5, -0.5, 0.2);
-			if (x == 1){autonCase++;}break;
+				case 2:
+					x=m_drivetrain->simpleDrive(-0.5, 0.0, 1.91); //Move backward.
+					if (x == 1){autonCase++;}break;
 
-			case 3:
-			x=m_drivetrain->simpleDrive(0.5, 0.0, 1.5);
-			if (x == 1){autonCase++;}break;
+				case 3:
+					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.91); //Turn L slightly.
+					if (x == 1){autonCase++;}break;
 
-			case 4:
-			x=m_drivetrain->simpleArmYAxis(0.5, 2.0);
-			if (x == 1){autonCase++;}break;
+				case 4:
+					x=m_drivetrain->simpleDrive(-0.51, 0.0, 2.21); //Move backward to wall.
+					if (x == 1){autonCase++;}break;
 
-			case 5:
-			x=m_drivetrain->simpleIntake(-1.0, 0.5);
-			if (x == 1){autonCase++;}break;
+				case 5:
+					x=m_drivetrain->simpleIntake(-1.0, 0.5); //Launch cube backwards.
+					if (x == 1){autonCase++;}break;
 			}
 		}
-}
-}
-/*if (startPosition==0)
-{
-	switch (autonCase)
+
+		else if (switchLR==-1)//Switch left.
 		{
-		case 0://move backwards.
-			autonTimer.Start();
-			m_drivetrain->ArcadeDrive(0.5, 0.0);
-			if (autonTimer.Get()>0.75)
+			switch (autonCase)
 			{
-				m_drivetrain->ArcadeDrive(0.0, 0.0);
-				autonTimer.Stop();
-				autonTimer.Reset();
-				autonCase++;
+				case 0:
+					x = m_drivetrain->simpleDrive(-0.5, 0.0, 1.3); //Move backwards slightly.
+					if (x == 1){autonCase++;}break;
+
+				case 1:
+					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.91); //Turn L slightly.
+					if (x == 1){autonCase++;}break;
+
+				case 2:
+					x=m_drivetrain->simpleDrive(-0.5, 0.0, 2.66); //Move backward.
+					if (x == 1){autonCase++;}break;
+
+				case 3:
+					x=m_drivetrain->simpleDrive(0.0, 0.5, 1.11); //Turn R slightly.
+					if (x == 1){autonCase++;}break;
+
+				case 4:
+					x=m_drivetrain->simpleDrive(-0.51, 0.0, 2.91); //Move backward to wall.
+					if (x == 1){autonCase++;}break;
+
+				case 5:
+					x=m_drivetrain->simpleIntake(-1.0, 0.51); //Launch cube backwards.
+					if (x == 1){autonCase++;}break;
 			}
-			break;
-		case 1:
-			autonTimer.Start();//turn
-			m_drivetrain->ArcadeDrive(0.0, 0.5);
-			if (autonTimer.Get()>0.3)
-			{
-				m_drivetrain->ArcadeDrive(0.0, 0.0);
-				autonTimer.Stop();
-				autonTimer.Reset();
-				autonCase++;
-			}
-			break;
 
-}
-switch (autonCase)
-{
-case 0:
-	autonTimer.Start();
-	m_drivetrain->ArcadeDrive(0.3, 0.0);
-	if (autonTimer.Get()>1.0)
-	{
-		m_drivetrain->ArcadeDrive(0.0, 0.0);
-		autonTimer.Stop();
-		autonTimer.Reset();
-		autonCase++;
+		}
 	}
-	break;
 
-case 1:
-	autonTimer.Start();
-	m_drivetrain->ArcadeDrive(0.2, 0.5);
-	if (autonTimer.Get()>0.5)
+	else if (startPosition==-1||startPosition==1) //Start L or R.
 	{
-		m_drivetrain->ArcadeDrive(0.0, 0.0);
-		autonTimer.Stop();
-		autonTimer.Reset();
-		autonCase++;
+		std::cout<<"RL working"<<std::endl;
+		if (switchLR==startPosition) //Sides match.
+		{
+			switch (autonCase)
+				{
+				case 0:
+					x=m_drivetrain->simpleDrive(-0.55, 0.141, 4.11); //Move back.
+					if (x == 1){autonCase++;}break;
+
+				case 1:
+					x=m_drivetrain->simpleDrive(0.0, -0.5 * startPosition, 1.55); //Turn to switch.
+					if (x == 1){autonCase++;}break;
+
+				case 2:
+					x=m_drivetrain->simpleDrive(-0.5, 0.0, 1.91); //Move back.
+					if (x == 1){autonCase++;}break;
+
+				case 3:
+					x=m_drivetrain->simpleIntake(-1.0, 0.5); //Launch cube.
+					if (x == 1){autonCase++;}break;
+				}
+		}
+
+		else //Sides don't match.
+		{
+			switch (autonCase)
+				{
+					case 0:
+						x=m_drivetrain->simpleDrive(-0.55, 0.141, 4.11); //Move back.
+						if (x == 1){autonCase++;}break;
+				}
+		}
 	}
-	break;
 }
-
-
-if (autonSingleRun==0)
-{
-/////////////////////////////////////////////////////////////////
-*
-* */
 
 void TeleopInit()
 {
@@ -262,7 +226,7 @@ void TeleopPeriodic()
 
 		else if (m_driver->ButtonLB())
 		{
-			m_drivetrain->armYAxis(-0.15);
+			m_drivetrain->armYAxis(-0.25);
 		}
 
 		else
@@ -313,7 +277,7 @@ void TeleopPeriodic()
 
 	else if (m_driver->ButtonLB())
 		{
-			m_drivetrain->armYAxis(-0.15);
+			m_drivetrain->armYAxis(-0.25);
 		}
 
 	else
@@ -334,20 +298,3 @@ void TestPeriodic()
 };
 
 START_ROBOT_CLASS(Robot)
-
-
-/*
-	if (autonLoopCounter<100)
-	{
-		m_drivetrain->ArcadeDrive(-1.0,0.0);
-		//m_drivetrain->intake(0.8);
-		autonLoopCounter=autonLoopCounter+1;
-	}
-
-	else
-	{
-		m_drivetrain->ArcadeDrive(0.0,0.0);
-		m_drivetrain->intake(0.0);
-	}
-*/
-

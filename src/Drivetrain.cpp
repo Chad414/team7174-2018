@@ -53,7 +53,7 @@ int Drivetrain::simpleDrive(double speed, double angle, double loopSeconds)
 		autonTimer.Start();
 		timerCheck=false;
 	}
-	m_drive.ArcadeDrive(speed, angle);
+	m_drive.ArcadeDrive(-speed, -angle);
 	intake(0.0);
 
 	if (autonTimer.Get()>loopSeconds)
@@ -182,12 +182,12 @@ void Drivetrain::potato()
 	if(speedMultiplier == 1.0)
 	{
 		speedMultiplier = .5;
-		waitTime(.25);
+		waitTime(.15);
 	}
 	else if(speedMultiplier == .5)
 	{
 		speedMultiplier = 1.0;
-		waitTime(.25);
+		waitTime(.15);
 	}
 }
 

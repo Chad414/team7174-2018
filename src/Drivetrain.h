@@ -39,9 +39,6 @@ using std::chrono::system_clock;
 #define forwardIntake 7
 #define armYAXIS 6
 
-
-
-
 #define LEFT_ENCODER 11 // Encoder values need to be updated
 #define RIGHT_ENCODER 12
 
@@ -60,7 +57,6 @@ public:
 	int simpleDrive(double speed, double angle, double loopSeconds);
 	int simpleIntake(double speed, double loopSeconds);
 	int simpleArmYAxis(double speed, double loopSeconds);
-
 
 	void intake(double inOut);
 	void armYAxis(double upDown);
@@ -114,10 +110,6 @@ private:
 	WPI_TalonSRX m_rDrive2;
 	WPI_VictorSPX frontIntake;
 	WPI_VictorSPX armYAxisObject;
-
-	//Victor *frontIntake = new Victor(7);
-	//Victor *armYAxisObject = new Victor(6);
-
 
 	RobotDrive m_drive;
 
