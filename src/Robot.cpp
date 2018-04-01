@@ -15,6 +15,7 @@
 #include "WPILib.h"
 #include "RobotUtils/RobotUtils.h"
 #include "Drivetrain.h"
+#include "CameraServer.h"
 
 class Robot : public frc::IterativeRobot
 {
@@ -31,9 +32,9 @@ private:
 	Drivetrain *m_drivetrain;
 	Timer autonTimer;
 
-/////////////////////////////////////////////////////////////////////////////////////
-	int startPosition=0;
-/////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+	int startPosition=1;
+//////////////////////////////////////////////////////////////////////////////////////
 
 public:
 
@@ -47,11 +48,18 @@ void RobotInit()
 {
 	autonTimer.Stop();
 	autonTimer.Reset();
+
+	cs::UsbCamera m_camera = CameraServer::GetInstance()->StartAutomaticCapture();
+	m_camera.SetResolution(160, 120);
+	m_camera.SetExposureHoldCurrent();
+	m_camera.SetBrightness(1);
+	m_camera.SetFPS(30);
 }
 
 void AutonomousInit() override
 {
 	autonCase=0;
+	std::cout<<"reset"<<std::endl;
 	m_drivetrain->speedMultiplier=1.0;
 
 	std::string gameData;
@@ -91,7 +99,7 @@ void AutonomousPeriodic() //simpleDrive(positive=forwards, positive=right, time 
 					if (x == 1){autonCase++;}break;
 
 				case 3:
-					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.91); //Turn L slightly.
+					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.789); //Turn L slightly.
 					if (x == 1){autonCase++;}break;
 
 				case 4:
@@ -113,15 +121,15 @@ void AutonomousPeriodic() //simpleDrive(positive=forwards, positive=right, time 
 					if (x == 1){autonCase++;}break;
 
 				case 1:
-					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.91); //Turn L slightly.
+					x=m_drivetrain->simpleDrive(0.0, -0.5, 0.78); //Turn L slightly.
 					if (x == 1){autonCase++;}break;
 
 				case 2:
-					x=m_drivetrain->simpleDrive(-0.5, 0.0, 2.66); //Move backward.
+					x=m_drivetrain->simpleDrive(-0.5, 0.0, 2.37); //Move backward.
 					if (x == 1){autonCase++;}break;
 
 				case 3:
-					x=m_drivetrain->simpleDrive(0.0, 0.5, 1.11); //Turn R slightly.
+					x=m_drivetrain->simpleDrive(0.0, 0.5, 0.9); //Turn R slightly.
 					if (x == 1){autonCase++;}break;
 
 				case 4:
@@ -148,7 +156,7 @@ void AutonomousPeriodic() //simpleDrive(positive=forwards, positive=right, time 
 					if (x == 1){autonCase++;}break;
 
 				case 1:
-					x=m_drivetrain->simpleDrive(0.0, -0.5 * startPosition, 1.55); //Turn to switch.
+					x=m_drivetrain->simpleDrive(0.0, -0.5 * startPosition, 1.161); //Turn to switch.
 					if (x == 1){autonCase++;}break;
 
 				case 2:
@@ -222,6 +230,7 @@ void TeleopPeriodic()
 		else if(m_driver->ButtonRB())
 		{
 			m_drivetrain->armYAxis(0.5);
+			m_drivetrain->intake(0.0);
 		}
 
 		else if (m_driver->ButtonLB())
@@ -273,6 +282,7 @@ void TeleopPeriodic()
 	else if(m_driver->ButtonRB())
 		{
 			m_drivetrain->armYAxis(0.5);
+			m_drivetrain->intake(0.0);
 		}
 
 	else if (m_driver->ButtonLB())

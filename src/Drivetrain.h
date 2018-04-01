@@ -39,7 +39,7 @@ using std::chrono::system_clock;
 #define forwardIntake 7
 #define armYAXIS 6
 
-#define LEFT_ENCODER 11 // Encoder values need to be updated
+#define LEFT_ENCODER 11 // Encoder values need to be updated.
 #define RIGHT_ENCODER 12
 
 class Drivetrain {

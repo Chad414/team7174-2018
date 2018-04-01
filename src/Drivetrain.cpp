@@ -218,7 +218,7 @@ void Drivetrain::stop() {
 	m_rDrive2.StopMotor();
 }
 
-void Drivetrain::setTalon(double speed, bool left) { // For testing only
+void Drivetrain::setTalon(double speed, bool left) { // For testing only.
 	if (left) {
 		m_lDrive1.Set(speed);
 	} else {
